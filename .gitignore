@@ -1,0 +1,5 @@
+src/model/
+venv/
+.idea/
+model/
+__pycache__

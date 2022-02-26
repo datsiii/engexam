@@ -1,0 +1,15 @@
+Description
+===========
+
+This is a website that helps English Learners practice their language skills.
+It uses vosk speech to text toolkit https://alphacephei.com/vosk/
+
+
+Installation
+============
+
+1) pip install -r requirements.txt
+
+2) Download and unzip vosk model into model directory
+
+3) Execute "flask run"
