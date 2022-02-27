@@ -1,26 +1,36 @@
 const URL = '/voice';
-let div = document.createElement('div');
-div.id = 'messages';
-let start = document.createElement('button');
-start.id = 'start';
-start.innerHTML = 'Start';
-let stop = document.createElement('button');
-stop.id = 'stop';
-stop.innerHTML = 'Stop';
-let control = document.createElement('div');
-control.id = 'control';
+let isRecord = false;
+//let div = document.createElement('div');
+//div.id = 'messages';
+//let start = document.createElement('button');
+//start.id = 'start';
+//start.innerHTML = 'Start';
+//let stop = document.createElement('button');
+//stop.id = 'stop';
+//stop.innerHTML = 'Stop';
+//let control = document.createElement('div');
+//control.id = 'control';
 
-document.body.appendChild(div);
-document.body.appendChild(start);
-document.body.appendChild(stop);
-document.body.appendChild(control);
+//document.body.appendChild(div);
+//document.body.appendChild(start);
+//document.body.appendChild(stop);
+//document.body.appendChild(control);
 navigator.mediaDevices.getUserMedia({ audio: true})
     .then(stream => {
         const mediaRecorder = new MediaRecorder(stream);
+        const recordButton = document.querySelector('.recordButton')
 
-        document.querySelector('#start').addEventListener('click', function(){
-            document.querySelector('#control').innerHTML = 'Recording...';
-            mediaRecorder.start();
+        document.querySelector('#record').addEventListener('click', function(){
+            if(!isRecord) {
+                recordButton.classList.add('buttonClicked')
+                document.querySelector('#control').innerHTML = 'Recording...';
+                mediaRecorder.start();
+                isRecord = true
+            } else {
+                recordButton.classList.remove('buttonClicked')
+                mediaRecorder.stop();
+                isRecord = false
+            }
         });
         let audioChunks = [];
         mediaRecorder.addEventListener("dataavailable",function(event) {
@@ -28,9 +38,9 @@ navigator.mediaDevices.getUserMedia({ audio: true})
             audioChunks.push(event.data);
         });
 
-        document.querySelector('#stop').addEventListener('click', function(){
-            mediaRecorder.stop();
-        });
+//        document.querySelector('#stop').addEventListener('click', function(){
+//            mediaRecorder.stop();
+//        });
 
         mediaRecorder.addEventListener("stop", function() {
             const audioBlob = new Blob(audioChunks, {
@@ -60,7 +70,7 @@ async function sendVoice(form) {
         response.data.forEach(element => {
             message = document.createElement('p')
             message.innerHTML = element.text
-            document.querySelector('#messages').appendChild(message)
+            document.querySelector('#answer').appendChild(message)
         })
 
         document.querySelector('#control').innerHTML = ""
